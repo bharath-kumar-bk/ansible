@@ -1,0 +1,12 @@
+- name: play level variables
+  hosts: FrontEnd
+  become: true
+  vars:
+    course: devops
+    duration: 120hrs
+    trainer: bharathkmar
+  tasks:
+    - name: print the course information
+      ansible.builtin.debug:
+        msg: "hello {{ course }} duration {{ duration }} trainer {{ trainer }}"
+
