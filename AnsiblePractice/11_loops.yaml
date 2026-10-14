@@ -1,0 +1,9 @@
+- name: printing with loop
+  hosts: FrontEnd
+  tasks:
+    - name: print the loop
+      ansible.builtin.debug:
+        msg: "hello {{ item }}"
+      loop:
+        - bharath
+        - kumar
