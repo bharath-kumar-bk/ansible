@@ -1,0 +1,60 @@
+- name: daily use tasks
+  hosts: FrontEnd
+  become: true
+  vars:
+    packages:
+      - nginx
+      - git
+      - curl
+    app_user: appuser
+    app_dir: /opt/myapp
+  tasks:
+    - name: check connectivity
+      ansible.builtin.ping:
+
+    - name: install packages
+      ansible.builtin.package:
+        name: "{{ packages }}"
+        state: present
+
+    - name: create a user
+      ansible.builtin.user:
+        name: "{{ app_user }}"
+        shell: /bin/bash
+        state: present
+
+    - name: create app directory
+      ansible.builtin.file:
+        path: "{{ app_dir }}"
+        state: directory
+        owner: "{{ app_user }}"
+        mode: "0755"
+
+    - name: create a file with content
+      ansible.builtin.copy:
+        content: "Managed by Ansible on {{ inventory_hostname }}\n"
+        dest: "{{ app_dir }}/info.txt"
+        owner: "{{ app_user }}"
+        mode: "0644"
+      notify: restart nginx
+
+    - name: run a shell command
+      ansible.builtin.shell: df -h / | tail -1
+      register: disk_usage
+      changed_when: false
+
+    - name: show the command output
+      ansible.builtin.debug:
+        msg: "{{ disk_usage.stdout }}"
+
+    - name: start and enable nginx
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: true
+
+  handlers:
+    - name: restart nginx
+      ansible.builtin.service:
+        name: nginx
+        state: restarted

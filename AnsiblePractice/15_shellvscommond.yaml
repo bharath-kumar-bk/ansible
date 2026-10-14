@@ -1,0 +1,62 @@
+- name: shell vs command module
+  hosts: FrontEnd
+  become: true
+  tasks:
+    - name: command - simple command works
+      ansible.builtin.command: uptime
+      register: r1
+      changed_when: false
+
+    - name: command - pipe is NOT processed
+      ansible.builtin.command: echo hello | tr a-z A-Z
+      register: r2
+      changed_when: false
+
+    - name: shell - pipe is processed
+      ansible.builtin.shell: echo hello | tr a-z A-Z
+      register: r3
+      changed_when: false
+
+    - name: command - variable is NOT expanded
+      ansible.builtin.command: echo $HOME
+      register: r4
+      changed_when: false
+
+    - name: shell - variable is expanded
+      ansible.builtin.shell: echo $HOME
+      register: r5
+      changed_when: false
+
+    - name: command - redirect is NOT processed
+      ansible.builtin.command: echo hi > /tmp/command_test.txt
+      register: r6
+      changed_when: false
+
+    - name: shell - redirect creates the file
+      ansible.builtin.shell: echo hi > /tmp/shell_test.txt
+      args:
+        creates: /tmp/shell_test.txt
+
+    - name: shell - chain commands with &&
+      ansible.builtin.shell: cd /tmp && pwd
+      register: r7
+      changed_when: false
+
+    - name: shell - use bash features
+      ansible.builtin.shell: echo {1..3}
+      args:
+        executable: /bin/bash
+      register: r8
+      changed_when: false
+
+    - name: show all results
+      ansible.builtin.debug:
+        msg:
+          - "command simple : {{ r1.stdout }}"
+          - "command pipe   : {{ r2.stdout }}"
+          - "shell pipe     : {{ r3.stdout }}"
+          - "command $HOME  : {{ r4.stdout }}"
+          - "shell $HOME    : {{ r5.stdout }}"
+          - "command >      : {{ r6.stdout }}"
+          - "shell &&       : {{ r7.stdout }}"
+          - "bash brace     : {{ r8.stdout }}"
