@@ -1,0 +1,14 @@
+- name: instaing mangodb
+  hosts: mongodb
+  become: true
+
+  tasks:
+   - name: copy the mongo repo
+     ansible.builtin.copy:
+       src: mongo.repo
+       dest: /etc/yum.repos.d/mongo.repo
+
+   - name: instaing mongodb
+     ansible.builtin.dnf:
+       name: mongodb-org
+       state: present
