@@ -1,0 +1,17 @@
+- name: play level variables
+  hosts: FrontEnd
+  vars_prompt:
+    - name: course
+      prompt: Enter the course name
+      private: false
+    - name: duration
+      prompt: Enter the duration
+      default: 120hrs
+      private: false
+    - name: trainer
+      prompt: Enter the trainer name
+      private: false
+  tasks:
+    - name: print the course information
+      ansible.builtin.debug:
+        msg: "hello {{ course }} duration {{ duration }} trainer {{ trainer }}"

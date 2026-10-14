@@ -1,0 +1,16 @@
+- name: check the condition using when
+  hosts: FrontEnd
+  become: true
+  tasks:
+    - name: install nginx if RedHat
+      ansible.builtin.dnf:
+        name: nginx
+        state: present
+      when: ansible_os_family == "RedHat"
+
+    - name: install nginx if Debian
+      ansible.builtin.apt:
+        name: nginx
+        state: present
+        update_cache: true
+      when: ansible_os_family == "Debian"

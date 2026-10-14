@@ -1,0 +1,18 @@
+- name: print the data types
+  hosts: FrontEnd
+  become: true
+
+  vars:
+   - name: print he couse deatils 
+     course: "devops"
+     duration: 120
+     live: true
+     technology:
+      - aws
+      - ansible
+  tasks:
+   - name: print cousers information
+     ansible.builtin.debug:
+      msg: "course {{ course }}, duration {{ duration }}, live {{ live }}, technology {{ technology }}"
+
+    

@@ -1,0 +1,17 @@
+- name: variables for the promt 
+  hosts: FrontEnd
+
+  vars_prompt:
+   - name: COURSE
+     prompt: enter the course name
+     private: false
+   - name: DURATION
+     prompt: enter the duration
+     private: false
+   - name: trainer
+     prompt: plase enter the trainer name
+     private: false
+  tasks:
+  - name: print the course deatils 
+    ansible.builtin.debug:
+      msg:"helloo {{ DURATION }}  course {{ COURSE }}"

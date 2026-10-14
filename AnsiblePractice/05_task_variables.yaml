@@ -1,0 +1,17 @@
+- name: play level variables
+  hosts: FrontEnd
+  become: true
+  vars:
+    course: devops
+    duration: 120hrs
+    trainer: bharathkmar
+  tasks:
+    - name: print the course information (task level override)
+      vars:
+        course: ansible
+      ansible.builtin.debug:
+        msg: "hello {{ course }} duration {{ duration }} trainer {{ trainer }}"
+
+    - name: print the course information (play level value)
+      ansible.builtin.debug:
+        msg: "hello {{ course }} duration {{ duration }} trainer {{ trainer }}"

@@ -1,0 +1,9 @@
+- name: play level variables
+  hosts: FrontEnd
+  become: true
+  vars_files:
+    - course.yaml
+  tasks:
+    - name: print the course information
+      ansible.builtin.debug:
+        msg: "hello {{ course }} duration {{ duration }} trainer {{ trainer }}"
