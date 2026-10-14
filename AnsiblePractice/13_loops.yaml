@@ -1,0 +1,11 @@
+- name: print loop with package
+  hosts: FrontEnd
+  become: true
+  tasks:
+    - name: install or remove packages using a loop
+      ansible.builtin.package:
+        name: "{{ item.name }}"
+        state: "{{ item.state }}"
+      loop:
+        - { name: nginx, state: present }
+        - { name: mysql, state: absent }
